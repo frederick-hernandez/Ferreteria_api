@@ -42,7 +42,10 @@ exports.findbyid  = (req, res) => {
                     message: "No se encontró ningún cliente con el ID: " + id
                 });
             }
-            res.send(cliente);
+            res.send(
+                {
+                    Cliente : cliente
+                });
         })
        .catch(err => {
             res.status(500).send({

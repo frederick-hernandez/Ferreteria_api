@@ -28,11 +28,11 @@ exports.findAll = async(req,res)=>{
   try {
       const Emple = await models.empleados.findAll({include:{model:models.area, as: "area"}})
       res.send({
-          Empleados: Emple
+        Empleados: Emple
       });
-  } catch (error) {
-      res.status(500).send({
-          message:
+  }   catch (error) {
+        res.status(500).send({
+             message:
               error.message || "Error al recuperar clientes."
       });
   }
@@ -51,7 +51,9 @@ exports.findById =(req, res) => {
        });
        return;
      }
-     res.send(data);
+     res.send({
+      Empleado : data
+    });
     })
    .catch(err => {
      if (err.kind === 'not_found') {
