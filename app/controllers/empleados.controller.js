@@ -1,5 +1,6 @@
 const {models} = require('../config/db.config');
 
+
 exports.create = async (req, res) => {
   try {
     let empleados = {
@@ -23,17 +24,18 @@ exports.create = async (req, res) => {
     }
 };
 
-exports.findAll =(req, res) => {
-    models.empleados.findAll({include:{model:models.area, as: "area"}})
-   .then(data => {
-     res.send(data);
-    })
-   .catch(err => {
-     res.status(500).send({
-       message:
-         err.message || "Error retrieving empleados."
-     });
-    });
+exports.findAll = async(req,res)=>{
+  try {
+      const Emple = await models.empleados.findAll({include:{model:models.area, as: "area"}})
+      res.send({
+          Empleados: Emple
+      });
+  } catch (error) {
+      res.status(500).send({
+          message:
+              error.message || "Error al recuperar clientes."
+      });
+  }
 };
 
 exports.findById =(req, res) => {
