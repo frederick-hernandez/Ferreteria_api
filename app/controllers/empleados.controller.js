@@ -24,7 +24,7 @@ exports.create = async (req, res) => {
     }
 };
 
-exports.findAll = async(req,res)=>{
+exports.findAll = async(req,res,next)=>{
   try {
       const Emple = await models.empleados.findAll({include:{model:models.area, as: "area"}})
       res.send({

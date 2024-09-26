@@ -115,10 +115,9 @@ exports.createTel = (req, res) => {
         });
 };
 
-
 exports.editTel= (req, res) => {
-    const { cliente_id, id, nuevo} = req.body;
-    models.telefonos_clientes.update({ telefono: nuevo }, {
+    const { cliente_id, id, telefono} = req.body;
+    models.telefonos_clientes.update({ telefono: telefono }, {
          where: { 
             cliente_id: cliente_id , 
             id:id
@@ -144,15 +143,17 @@ exports.editTel= (req, res) => {
 };
 
 exports.selectTel = (req, res) =>{
-    const { cliente_id,telefono} = req.params;
-    models.telefonos_clientes.findAll({ where: { cliente_id: cliente_id ,telefono:telefono} })
+    const { cliente_id} = req.params;
+    models.telefonos_clientes.findAll({ where: { cliente_id: cliente_id} })
        .then(telefono => {
             if (!telefono) {
                 return res.status(404).send({
                     message: "No se encontraron teléfonos para el cliente con el ID: " + cliente_id
                 });
             }
-            res.send(telefono);
+            res.send({
+                telefonos: telefono
+            });
         })
        .catch(err => {
             res.status(500).send({
@@ -199,8 +200,8 @@ exports.insertDire = (req, res) => {
 };
 
 exports.editDire = (req, res) => {
-        const { cliente_id, id, nuevo_calle, nuevo_numero, nuevo_comuna, nuevo_ciudad } = req.body;
-        models.direcciones_clientes.update({ calle: nuevo_calle, numero: nuevo_numero, comuna: nuevo_comuna, ciudad: nuevo_ciudad }, {
+        const { cliente_id, id, calle, numero, comuna, ciudad } = req.body;
+        models.direcciones_clientes.update({ calle: calle, numero: numero, comuna: comuna, ciudad: ciudad }, {
              where: { 
                 cliente_id: cliente_id , 
                 id:id
@@ -217,3 +218,47 @@ exports.editDire = (req, res) => {
                 }
             });
 };
+
+exports.selectDire = (req, res) =>{
+    const { cliente_id } = req.params;
+    models.direcciones_clientes.findAll({ where: { cliente_id: cliente_id } })
+       .then(direccion => {
+            if (!direccion) {
+                return res.status(404).send({
+                    message: "No se encontraron direcciones para el cliente con el ID: " + cliente_id
+                });
+            }
+            res.send({
+                direcciones: direccion
+            });
+        })
+       .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Error al recuperar las direcciones."
+            });
+        });
+}
+
+exports.deleteDire = (req, res) => {
+    const { cliente_id, id } = req.body;
+    models.direcciones_clientes.destroy({ where: { cliente_id: cliente_id, id: id } })
+       .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Dirección eliminada correctamente."
+                });
+            } else {
+                res.send({
+                    message: `No se encontró ninguna dirección con el ID: ${id}`
+                });
+            }
+        })
+       .catch(err => {
+            res.status(500).send({
+                message:
+                    "Error eliminando la dirección."
+            });
+        });
+};
+

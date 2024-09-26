@@ -7,15 +7,15 @@ router.get('/empleado', (req, res) => {
 })
 
 
-router.get('/empleado/findAll', empleados.findAll);
+router.get('/empleado/findAll', empleados.findAll); // si
 
-router.post('/empleado/create', empleados.create);
+router.post('/empleado/create', empleados.create);//si
 
-router.get('/empleado/findbyid/:id', empleados.findById);
+router.get('/empleado/findbyid/:id', empleados.findById);// si
 
-router.put('/empleado/update/:id', empleados.update);
+router.put('/empleado/update/:id', empleados.update);// si
 
-router.delete('/empleado/delete/:id', empleados.delete);
-router.put('/empleado/status/:id', empleados.status);
+router.delete('/empleado/delete/:id', empleados.delete);//si
+router.put('/empleado/status/:id', empleados.status);//si
 
 module.exports = router;
