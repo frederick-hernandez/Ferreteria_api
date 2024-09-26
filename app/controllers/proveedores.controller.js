@@ -17,7 +17,7 @@ exports.findAll =(req, res) => {
     });
 };
 
-exports.create =(req, res) => {
+exports.create = (req, res) => {
   const { nombre, direccion, telefono } = req.body;
   models.proveedores.create({ nombre, direccion, telefono })
     .then(proveedor => {
@@ -40,7 +40,8 @@ exports.findOne =(req, res) => {
           message: "No se encontró el proveedor con el ID: " + id
         });
       }
-      res.send(proveedor);
+      res.send({
+        proveedor: proveedor});
     })
     .catch(err => {
       res.status(500).send({
@@ -71,4 +72,27 @@ exports.update =(req, res) => {
        message: "Error actualizando el proveedor con el ID: " + id
      });
    });
+};
+
+exports.delete =(req, res) => {
+  const id = req.params.id;
+  models.proveedores.destroy({
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Proveedor eliminado correctamente."
+        });
+      } else {
+        res.send({
+          message: `No se encontró ningún proveedor con el ID: ${id}`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error eliminando el proveedor con el ID: " + id
+      });
+    });
 };
