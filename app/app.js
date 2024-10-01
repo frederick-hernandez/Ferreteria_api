@@ -10,13 +10,8 @@ app.get('/', (req, res) => {
     res.send('Welcome home')
 })
 
-const corsOptions = {
-  origin: 'https://ferreteria-api.onrender.com',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use('/api/v1',routeremp);
 app.use('/api/v2',routerArea);
