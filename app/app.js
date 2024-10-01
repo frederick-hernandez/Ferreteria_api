@@ -5,7 +5,6 @@ const routerCliente = require('./routers/clientes.router.js')
 const routerproveedores = require('./routers/proveedores.router.js')
 const routerpcabecera = require('./routers/pcabecera.router.js')
 const cors = require('cors');
-app.use(cors());
 const app = express();
 app.get('/', (req, res) => {
     res.send('Welcome home')

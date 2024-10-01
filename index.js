@@ -10,4 +10,5 @@ sequelize.sync().then(() => {
 }).catch((err) => {
   console.error('Error connecting to the database:', err);
 });
+
 module.exports = app;
