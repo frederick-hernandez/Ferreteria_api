@@ -11,6 +11,7 @@ exports.create = async (req, res) => {
       direccion: req.body.direccion,
       email: req.body.email,
       salario: req.body.salario,
+      status: req.body.status
     }
     let newEmpleado = await models.empleados.create(empleados);
     res.status(201).send({
