@@ -99,6 +99,30 @@ exports.darBaja = (req, res) => {
         });
 };
 
+exports.deleteCliente={
+    delete: (req, res) => {
+        const { id } = req.params;
+        models.clientes.destroy({ where: { id: id } })
+           .then(num => {
+                if (num == 1) {
+                    res.send({
+                        message: "Cliente eliminado correctamente."
+                    });
+                } else {
+                    res.send({
+                        message: `No se encontró ningún cliente con el ID: ${id}`
+                    });
+                }
+            })
+           .catch(err => {
+                res.status(500).send({
+                    message:
+                        "Error eliminando el cliente."
+                });
+            });
+    }
+}
+
 
 
 exports.createTel = (req, res) => {

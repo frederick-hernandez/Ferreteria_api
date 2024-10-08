@@ -8,6 +8,7 @@ router.get('/cliente/findall', clientes.findAll); //si
 router.get('/cliente/findbyid/:id', clientes.findbyid); //si
 router.put('/cliente/update/:id', clientes.update); //si
 router.put('/cliente/status/:id', clientes.darBaja); // si
+router.delete('/cliente/delete/:id', clientes.delete); // si
 
 //Telfonos
 router.get('/cliente/tel/:cliente_id', clientes.selectTel); // si
