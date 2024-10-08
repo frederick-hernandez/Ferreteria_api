@@ -99,9 +99,10 @@ exports.darBaja = (req, res) => {
         });
 };
 
-exports.deleteCliente={
-    delete: (req, res) => {
+exports.deleteCliente = (req, res) => {
         const { id } = req.params;
+        models.telefonos_clientes.destroy({ where: { cliente_id: id } })
+        models.direcciones_clientes.destroy({ where: { cliente_id: id } })
         models.clientes.destroy({ where: { id: id } })
            .then(num => {
                 if (num == 1) {
@@ -121,10 +122,6 @@ exports.deleteCliente={
                 });
             });
     }
-}
-
-
-
 exports.createTel = (req, res) => {
     const { cliente_id, telefono } = req.body;
     models.telefonos_clientes.create({ cliente_id, telefono })
