@@ -1,23 +1,23 @@
 const {models} = require('../config/db.config');
 
-
-exports.findAll =(req, res) => {
-    models.pedidos_cabecera.findAll()
-   .then(data => {
-     res.send({
-      cabecera: data
+exports.findAll = async(req, res) => {
+  try {
+    const Pedido = await models.pedidos_cabecera.findAll({
+      include: [{ model: models.pedidos_cuerpo, as: "pedidos_cuerpos" }]
     });
-    })
-   .catch(err => {
-     res.status(500).send({
-       message:
-         err.message || "Error retrieving proveedores."
-     });
+    res.send({
+      pedido: Pedido
     });
+  } catch (error) {
+    res.status(500).send({
+      message: error.message || "Error al recuperar clientes."
+    });
+  }
 };
 
+
 exports.findById =(req, res) => {
-    models.pedidos_cabecera.findByPk(req.params.id, {include:[{model:models.proveedores, as: "proveedor"}, {model:models.clientes, as: "cliente"}, {model:models.pedidos_detalle, as: "detalle"}]}
+    models.pedidos_cabecera.findByPk(req.params.id, {include:[{Cuerpo:models.pedidos_cuerpo, as: "detalle"}]}
     )
    .then(data => {
      if (!data) {
@@ -37,9 +37,10 @@ exports.findById =(req, res) => {
 
 exports.create = (req, res) => {
     models.pedidos_cabecera.create({
-      fecha: req.body.fecha,
-      proveedor_id: req.body.proveedor_id,
-      cliente_id: req.body.cliente_id
+      fecha_pedido: req.body.fecha,
+      direccion_envio: req.body.direccion_envio,
+      cliente_id: req.body.cliente_id,
+
     })
    .then(data => {
      res.send(data);
@@ -54,7 +55,7 @@ exports.create = (req, res) => {
 
 exports.update = (req, res) => {
     const { id } = req.params;
-    models.pedidos_cabecera.update({ fecha: req.body.fecha, proveedor_id: req.body.proveedor_id, cliente_id: req.body.cliente_id }, { where: { id: id } })
+    models.pedidos_cabecera.update({ fecha: req.body.fecha, direccion_envio: req.body.direccion_envio, cliente_id: req.body.cliente_id }, { where: { id: id } })
        .then(num => {
             if (num == 1) {
                 res.send({
@@ -75,6 +76,7 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
     const { id } = req.params;
+    models.pedidos_cuerpo.destroy({where: {pedido_id: id}});
     models.pedidos_cabecera.destroy({ where: { id: id } })
        .then(num => {
             if (num == 1) {
@@ -94,3 +96,17 @@ exports.delete = (req, res) => {
         });
 };
 
+
+exports.createC = (req, res) =>{
+  const { pedido_id, producto_id, cantidad } = req.body;
+  models.pedidos_cuerpo.create({ pedido_id, producto_id, cantidad })
+     .then(data => {
+        res.send(data);
+      })
+     .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Error creating the detalle."
+        });
+      });
+}
