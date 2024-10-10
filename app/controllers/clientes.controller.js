@@ -104,23 +104,24 @@ exports.deleteCliente = (req, res) => {
         models.telefonos_clientes.destroy({ where: { cliente_id: id } })
         models.direcciones_clientes.destroy({ where: { cliente_id: id } })
         models.clientes.destroy({ where: { id: id } })
-           .then(num => {
-                if (num == 1) {
-                    res.send({
-                        message: "Cliente eliminado correctamente."
-                    });
-                } else {
-                    res.send({
-                        message: `No se encontró ningún cliente con el ID: ${id}`
-                    });
-                }
-            })
-           .catch(err => {
-                res.status(500).send({
-                    message:
-                        "Error eliminando el cliente."
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Cliente eliminado correctamente."
                 });
+            } else {
+                res.send({
+                    message: `No se encontró ningún cliente con el ID: ${id}`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    "Error eliminando el cliente."
             });
+        });
+        
     }
 exports.createTel = (req, res) => {
     const { cliente_id, telefono } = req.body;
