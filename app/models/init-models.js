@@ -12,6 +12,7 @@ var _pedidos_cuerpo = require("./pedidos_cuerpo");
 var _productos = require("./productos");
 var _proveedores = require("./proveedores");
 var _pruebas = require("./pruebas");
+var _rating = require("./rating");
 var _telefonos_clientes = require("./telefonos_clientes");
 var _usuarios = require("./usuarios");
 
@@ -29,6 +30,7 @@ function initModels(sequelize) {
   var productos = _productos(sequelize, DataTypes);
   var proveedores = _proveedores(sequelize, DataTypes);
   var pruebas = _pruebas(sequelize, DataTypes);
+  var rating = _rating(sequelize, DataTypes);
   var telefonos_clientes = _telefonos_clientes(sequelize, DataTypes);
   var usuarios = _usuarios(sequelize, DataTypes);
 
@@ -44,6 +46,8 @@ function initModels(sequelize) {
   pedidos_cabecera.hasMany(pedidos_cuerpo, { as: "pedidos_cuerpos", foreignKey: "pedido_id"});
   pedidos_cuerpo.belongsTo(productos, { as: "producto", foreignKey: "producto_id"});
   productos.hasMany(pedidos_cuerpo, { as: "pedidos_cuerpos", foreignKey: "producto_id"});
+  rating.belongsTo(productos, { as: "producto", foreignKey: "producto_id"});
+  productos.hasMany(rating, { as: "rating", foreignKey: "producto_id"});
   productos.belongsTo(proveedores, { as: "proveedor", foreignKey: "proveedor_id"});
   proveedores.hasMany(productos, { as: "productos", foreignKey: "proveedor_id"});
 
@@ -61,6 +65,7 @@ function initModels(sequelize) {
     productos,
     proveedores,
     pruebas,
+    rating,
     telefonos_clientes,
     usuarios,
   };

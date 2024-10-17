@@ -98,31 +98,44 @@ exports.darBaja = (req, res) => {
             });
         });
 };
-
 exports.deleteCliente = (req, res) => {
-        const { id } = req.params;
-        models.telefonos_clientes.destroy({ where: { cliente_id: id } })
-        models.direcciones_clientes.destroy({ where: { cliente_id: id } })
-        models.clientes.destroy({ where: { id: id } })
-        .then(num => {
-            if (num == 1) {
-                res.send({
-                    message: "Cliente eliminado correctamente."
-                });
-            } else {
-                res.send({
-                    message: `No se encontró ningún cliente con el ID: ${id}`
-                });
-            }
-        })
+    const { id } = req.params;
+  
+    // Función para manejar promesas de eliminación y capturar errores sin interrumpir
+    const safeDestroy = (model, condition) => {
+      return model.destroy({ where: condition })
+        .then(() => null)
         .catch(err => {
-            res.status(500).send({
-                message:
-                    "Error eliminando el cliente."
-            });
+          console.log(`Error o ningún registro encontrado en ${model.name}:`, err);
+          return null;
         });
-        
-    }
+    };
+  
+    Promise.all([
+      safeDestroy(models.telefonos_clientes, { cliente_id: id }),
+      safeDestroy(models.direcciones_clientes, { cliente_id: id })
+    ])
+    .then(() => {
+      return models.clientes.destroy({ where: { id: id } });
+    })
+    .then(num => {
+      if (num === 1) {
+        res.send({
+          message: "Cliente eliminado correctamente."
+        });
+      } else {
+        res.send({
+          message: `No se encontró ningún cliente con el ID: ${id}`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error eliminando el cliente."
+      });
+    });
+  };
+  
 exports.createTel = (req, res) => {
     const { cliente_id, telefono } = req.body;
     models.telefonos_clientes.create({ cliente_id, telefono })

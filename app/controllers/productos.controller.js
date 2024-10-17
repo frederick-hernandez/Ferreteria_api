@@ -2,11 +2,24 @@ const {models} = require('../config/db.config');
 
 
 exports.findall=(req,res)=>{
-    models.productos.findAll()
+    models.productos.findAll({
+        attributes: [
+            'id',
+            'title',
+        'price',
+        'description',
+        'category',
+        'image'
+        ],
+        include: [
+            {
+                model : models.rating,
+                as: 'rating',
+                attributes: ['rate' ,'count']
+            }]
+    })
     .then(data=>{
-        res.send({
-            Productos: data
-        });
+        res.send(data);
     })
     .catch(err=>{
         res.status(500).send({
@@ -17,8 +30,8 @@ exports.findall=(req,res)=>{
 };
 
 exports.create =(req, res, next) => {
-    const { nombre, precio_actual,stock,proveedor_id,precio_costo} = req.body;
-    models.productos.create({ nombre, precio_actual,stock,proveedor_id,precio_costo})
+    const { title, price, description, proveedor_id, category, image} = req.body;
+    models.productos.create({title, price, category, description, proveedor_id, image})
     .then(producto => {
         res.send(producto);
     })
@@ -32,16 +45,30 @@ exports.create =(req, res, next) => {
 
 exports.findById =(req, res) => {
     const id = req.params.id;
-    models.productos.findByPk(id)
+    models.productos.findByPk(id,
+        {attributes: [
+            'id',
+            'title',
+        'price',
+        'description',
+        'category',
+        'image'
+        ],
+        include: [
+            {
+                model : models.rating,
+                as: 'rating',
+                attributes: ['rate' ,'count']
+            }]
+    }
+    )
    .then(data=>{
     if (!data) {
         res.status(404).send({
             message: "No se encontro el producto con el ID: " + id
         });
     } else {
-        res.send({
-            producto: data
-        });
+        res.send(data);
     }
     })
    .catch(err=>{
@@ -53,9 +80,9 @@ exports.findById =(req, res) => {
 };
 
 exports.update =(req, res) => {
-    const { nombre, precio_actual, stock, proveedor_id, precio_costo} = req.body;
+    const { title, price, description, proveedor_id, category, image} = req.body;
     const id = req.params.id;
-    models.productos.update({ nombre, precio_actual, stock, proveedor_id, precio_costo}, { where: { id: id }})
+    models.productos.update({ title, price, category, description, proveedor_id, image}, { where: { id: id }})
     .then(num => {
         if(num == 1){
             res.send({

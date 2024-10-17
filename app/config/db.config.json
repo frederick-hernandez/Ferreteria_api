@@ -1,9 +1,9 @@
 {
     "dialect": "postgres",
-    "host": "dpg-cr6i082j1k6c73d4kr9g-a.oregon-postgres.render.com",
+    "host": "dpg-crqc5988fa8c738vtqeg-a.oregon-postgres.render.com",
     "username": "frhand",
-    "password": "Dum3KaI5f6qqecW5W3MzEPAdRQg1W4L8",
-    "database": "umgppruebas",
+    "password": "BES7hkrAqV7MuhxrJ8jjFCnmguqgXjbU",
+    "database": "ferreteria_2ihp",
     "dialectOptions": {
       "ssl": {
         "require": true,
