@@ -1,8 +1,8 @@
 const env = {
-    database: 'ferreteria_2ihp',
+    database: 'ferreteria_z840',
     username: 'frhand',
-    password: 'BES7hkrAqV7MuhxrJ8jjFCnmguqgXjbU',
-    host: 'dpg-crqc5988fa8c738vtqeg-a.oregon-postgres.render.com',
+    password: 'HkQs6PpobkfwlP5nxWaa3QQlZtDPqCH0',
+    host: 'dpg-cse74n5svqrc73etibsg-a.oregon-postgres.render.com',
     dialect: 'postgres',
     pool: {
       max: 5,
