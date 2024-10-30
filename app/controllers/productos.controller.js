@@ -29,6 +29,20 @@ exports.findall=(req,res)=>{
     });
 };
 
+exports.findP=(req,res)=>{
+    models.productos.findAll()
+    .then(data=>{
+        res.send(data);
+    })
+    .catch(err=>{
+        res.status(500).send({
+            message:
+                err.message || "Error retrieving Area."
+        });
+    });
+};
+
+
 exports.create =(req, res, next) => {
     const { title, price, description, proveedor_id, category, image} = req.body;
     models.productos.create({title, price, category, description, proveedor_id, image})
