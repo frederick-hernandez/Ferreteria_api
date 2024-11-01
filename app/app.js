@@ -1,6 +1,4 @@
-const stripe = require("stripe")(
-  "sk_test_51Q9AEA09aSD3bY6NBMCNdBYSwazvtVaL2iywZArY76L6G5fltckNBdhBvptwXbEs1WCznD8CdENrHG1EuYwlNCnJ00wWyKHCgQ"
-);
+const stripe = require("stripe")("sk_test_51Q9AEA09aSD3bY6NBMCNdBYSwazvtVaL2iywZArY76L6G5fltckNBdhBvptwXbEs1WCznD8CdENrHG1EuYwlNCnJ00wWyKHCgQ");
 const express = require("express");
 const routeremp = require("./routers/empleado.router.js");
 const routerArea = require("./routers/area.router.js");
@@ -17,7 +15,7 @@ app.get("/", (req, res) => {
   res.send("Welcome home");
 });
 
-const YOUR_DOMAIN = "ferreteria-api.onrender.com";
+const YOUR_DOMAIN = "https://ferreteria-api.onrender.com";
 app.use(cors());
 app.use(express.json());
 app.use("/api/v1", routeremp);
@@ -31,21 +29,21 @@ app.post("/checkout", async (req, res) => {
   const items = req.body.items.map((item) => {
     return {
       price_data: {
-        currency: "usd",
+        currency: 'usd',
         product_data: {
           name: item.title,
           images: [item.image],
         },
-        unit_amount: item.price * 100,
+        unit_amount: Math.round(item.price * 100),
       },
       quantity: item.qty,
-    };
+    }
   });
 
   const session = await stripe.checkout.sessions.create({
     line_items: [...items],
-    mode: "payment",
-    success_url: 'ferreteria-api.onrender.com/succes',
+    mode: 'payment',
+    success_url: 'https://ferreteria-api.onrender.com/success',
     cancel_url: `${YOUR_DOMAIN}/cancel`,
   });
 
@@ -57,16 +55,16 @@ app.get('/success',(req, res)=>{
   res.sendFile(path.join(__dirname, "success.html"));
 })
 
+
 app.get('/cancel',(req, res)=>{
   res.sendFile(path.join(__dirname, "cancel.html"));
 })
 
 app.get("/session-status", async (req, res) => {
   const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
-
   res.send({
     status: session.status,
-    customer_email: session.customer_details.email,
+    customer_email: session.customer_details.email
   });
 });
 
